@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cashyalla.home.led.domain.CommonResult;
+import com.cashyalla.home.led.domain.CurrentLedMode;
 import com.cashyalla.home.led.domain.DimGroup;
 import com.cashyalla.home.led.domain.LedMode;
 import com.cashyalla.home.led.service.LedControlService;
@@ -29,6 +30,9 @@ public class LedModeController {
 		
 		List<LedMode> ledModeList = ledControlService.getLedModeList();
 		model.addAttribute("ledModeList", ledModeList);
+		
+		CurrentLedMode currentLedMode = ledControlService.getCurrentLedMode();
+		model.addAttribute("currentLedMode", currentLedMode);
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
@@ -94,8 +98,15 @@ public class LedModeController {
 	
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelMap set(LedMode ledMode) {
+	public ModelMap set(CurrentLedMode ledMode) {
 		ModelMap modelMap = new ModelMap();
+		
+		try {
+			ledControlService.setCurrentLedMode(ledMode);
+			modelMap.addAttribute(new CommonResult(true));
+		} catch (Exception e) {
+			modelMap.addAttribute(new CommonResult(e));
+		}
 		
 		return modelMap;
 	}

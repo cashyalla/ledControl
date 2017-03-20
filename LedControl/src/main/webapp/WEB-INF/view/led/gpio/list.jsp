@@ -11,16 +11,11 @@
 		<h1>${current.menuName}</h1>
 	</section>
 
-<!-- 	<div class="row">
-		<div class="col-md-12 well">
-			<input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
-		</div>
-	</div> -->
 	<section class="content">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="pull-right">
-					<button type="button" class="btn btn-sm btn-flat btn-primary" id="btnNew"><i class="glyphicon glyphicon-plus"></i><span>  신규 등록</span></button>
+					<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
 				</div>
 			</div>
 		</div>
@@ -52,10 +47,10 @@
 									</td>
 									<td>${pin.description}</td>
 									<td>
-										<button type="button" class="btn btn-success btn-sm" onclick="updateModal(${pin.seq});">수정</button>
+										<button type="button" class="btn btn-success btn-sm btn-flat btn-update" onclick="updateModal(${pin.seq});">수정</button>
 									</td>
 									<td>
-										<button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${pin.seq});">삭제</button>
+										<button type="button" class="btn btn-danger btn-sm btn-flat btn-delete" onclick="removeItem(${pin.seq});">삭제</button>
 									</td>
 								</tr>
 							</c:forEach>
@@ -79,20 +74,20 @@
 				<div class="modal-body">
 					<form id="gpioForm">
 						<input type="hidden" name="seq"/>
-						<div class="input-group">
+						<div class="form-group">
 							<span class="input-group-addon" id="pin_number_addon">핀 번호</span>
 							<input type="number" class="form-control" name="pinNumber" placeholder="핀 번호" aria-describedby="pin_number_addon"/>
 						</div>
-						<div class="input-group">
+						<div class="form-group">
 							<span class="input-group-addon" id="description_addon">핀 설명</span>
 							<input type="text" class="form-control" name="description" placeholder="핀 설명" aria-describedby="description_addon"/>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" aria-hidden="true">취소</button>
-					<button type="button" class="btn btn-primary btn-sm" id="btnSave">저장</button>
-					<button type="button" class="btn btn-info btn-sm" id="btnUpdate">수정</button>
+					<button type="button" class="btn btn-success btn-sm btn-flat btn-cancel" data-dismiss="modal" aria-hidden="true">취소</button>
+					<button type="button" class="btn btn-primary btn-sm btn-flat btn-save" id="btnSave">저장</button>
+					<button type="button" class="btn btn-info btn-sm btn-flat btn-update" id="btnUpdate">수정</button>
 				</div>
 			</div>
 		</div>

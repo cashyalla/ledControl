@@ -21,6 +21,7 @@
 <!-- iCheck -->
 <link rel="stylesheet" href="/plugins/iCheck/square/blue.css">
 <!-- <link href="/css/default.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="/css/default.css">
 
 <title><sitemesh:write property='title' /></title>
 <sitemesh:write property='head' />
@@ -97,6 +98,7 @@
 <script src="/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/app.min.js"></script>
+<script src="/js/common.js"></script>
 <sitemesh:write property='page.end'/>
 </body>
 </html>

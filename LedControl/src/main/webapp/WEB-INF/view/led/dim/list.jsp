@@ -15,7 +15,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="pull-right">
-					<button type="button" class="btn btn-sm btn-flat btn-primary" id="btnNew"><i class="glyphicon glyphicon-plus"></i><span>  신규 등록</span></button>
+					<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
 				</div>
 			</div>
 		</div>
@@ -48,9 +48,9 @@
 							<td>${dimGroup.dimName}</td>
 							<td>${dimGroup.description}</td>
 							<td>${dimGroup.useYn}</td>
-							<td><button type="button" class="btn btn-sm btn-success" onclick="updateModal('${dimGroup.dimId}');">수정</button></td>
-							<td><button type="button" class="btn btn-sm btn-warning" onclick="registerDimDetailModal('${dimGroup.dimId}');">핀 추가</button></td>
-							<td><button type="button" class="btn btn-sm btn-danger" onclick="removeDimGroup('${dimGroup.dimId}');">삭제</button></td>
+							<td><button type="button" class="btn btn-sm btn-success btn-update" onclick="updateModal('${dimGroup.dimId}');">수정</button></td>
+							<td><button type="button" class="btn btn-sm btn-warning btn-add" onclick="registerDimDetailModal('${dimGroup.dimId}');">핀 추가</button></td>
+							<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimGroup('${dimGroup.dimId}');">삭제</button></td>
 						</tr>
 						<c:forEach items="${dimGroup.dimDetails}" var="dimDetail">
 							<tr>
@@ -61,8 +61,8 @@
 								<td colspan="3">
 									핀 설명 : ${dimDetail.gpioPinInfo.description}
 								</td>
-								<td><button type="button" class="btn btn-sm btn-info" onclick="updateDimDetailModal('${dimDetail.seq}');">수정</button></td>
-								<td><button type="button" class="btn btn-sm btn-danger" onclick="removeDimDetail('${dimDetail.seq}');">삭제</button></td>
+								<td><button type="button" class="btn btn-sm btn-info btn-update" onclick="updateDimDetailModal('${dimDetail.seq}');">수정</button></td>
+								<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimDetail('${dimDetail.seq}');">삭제</button></td>
 							</tr>
 						</c:forEach>
 					</c:forEach>
@@ -102,9 +102,9 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" aria-hidden="true">취소</button>
-					<button type="button" class="btn btn-primary btn-sm" id="btnSave">저장</button>
-					<button type="button" class="btn btn-info btn-sm" id="btnUpdate">수정</button>
+					<button type="button" class="btn btn-success btn-sm btn-cancel" data-dismiss="modal" aria-hidden="true">취소</button>
+					<button type="button" class="btn btn-primary btn-sm btn-save" id="btnSave">저장</button>
+					<button type="button" class="btn btn-info btn-sm btn-update" id="btnUpdate">수정</button>
 				</div>
 			</div>
 		</div>
@@ -141,9 +141,9 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" aria-hidden="true">취소</button>
-					<button type="button" class="btn btn-primary btn-sm" id="btnSaveDetail">저장</button>
-					<button type="button" class="btn btn-info btn-sm" id="btnUpdateDetail">수정</button>
+					<button type="button" class="btn btn-success btn-sm btn-cancel" data-dismiss="modal" aria-hidden="true">취소</button>
+					<button type="button" class="btn btn-primary btn-sm btn-save" id="btnSaveDetail"><span class="btn-save">저장</span></button>
+					<button type="button" class="btn btn-info btn-sm btn-update" id="btnUpdateDetail">수정</button>
 				</div>
 			</div>
 		</div>

@@ -12,15 +12,12 @@ import com.cashyalla.home.led.domain.CurrentBrightness;
 import com.cashyalla.home.led.domain.DimGroup;
 import com.cashyalla.home.led.domain.LedMode;
 import com.cashyalla.home.led.domain.LedModeSettings;
-import com.pi4j.io.gpio.RaspiPin;
 
 @Service
 public class DimmingService {
 
 	@Autowired
 	private LedControlService ledControlService;
-	
-	private Object monitor = new Object();
 	
 	public void setBrightness() {
 		
@@ -51,9 +48,7 @@ public class DimmingService {
 		for (DimGroup dimGroup : dimGroupList) {
 			dimGroupValueMap.put(dimGroup, 0);
 		}
-		
-		RaspiPin.
-		
+
 		// 현재 설정값 맵에 저장
 		for (CurrentBrightness currentBrightness : currentBrightnessList) {
 			dimGroupValueMap.put(currentBrightness.getDimGroup(), currentBrightness.getValue());
@@ -66,4 +61,7 @@ public class DimmingService {
 		}
 	}
 	
+	public synchronized void changeBrightness(Map<DimGroup, Integer> srcValue, Map<DimGroup, Integer> tgtValue) {
+
+	}
 }

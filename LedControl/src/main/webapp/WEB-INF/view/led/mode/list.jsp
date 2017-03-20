@@ -21,7 +21,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="pull-right">
-					<button type="button" class="btn btn-sm btn-flat btn-primary" onclick="registerModal();"><i class="glyphicon glyphicon-plus"></i><span>  신규 등록</span></button>
+					<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" onclick="registerModal();">신규 등록</button>
 				</div>
 			</div>
 		</div>
@@ -31,7 +31,7 @@
 			<div class="col-md-6">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<h3>${ledMode.modeName}</h3>
+						<h3>${ledMode.modeName}<c:if test="${ledMode.modeId eq currentLedMode.modeId}">(사용중)</c:if></h3>
 					</div>
 					<div class="box-body">
 						<div style="height: 70px;">
@@ -39,10 +39,12 @@
 						</div>
 						<div class="pull-right">
 						<c:if test="${ledMode.modeId ne config.modeSchedule and ledMode.modeId ne config.modeManual and ledMode.modeId ne config.modeCycle}">
-							<button type="button" class="btn btn-warning btn-sm btn-flat" onclick="updateModal('${ledMode.modeId}');"><i class="glyphicon glyphicon-pencil"></i><span>  수정</span></button>
-							<button type="button" class="btn btn-danger btn-sm btn-flat" onclick="deleteMode('${ledMode.modeId}');"><i class="glyphicon glyphicon-remove"></i><span>  삭제</span></button>
+							<button type="button" class="btn btn-warning btn-sm btn-flat btn-update" onclick="updateModal('${ledMode.modeId}');">수정</button>
+							<button type="button" class="btn btn-danger btn-sm btn-flat btn-delete" onclick="deleteMode('${ledMode.modeId}');">삭제</button>
 						</c:if>
-							<button type="button" class="btn btn-primary btn-sm btn-flat" onclick="setMode('${ledMode.modeId}');"><i class="glyphicon glyphicon-ok"></i><span>  적용</span></button>
+						<c:if test="${ledMode.modeId ne currentLedMode.modeId}">
+							<button type="button" class="btn btn-primary btn-sm btn-flat btn-ok" onclick="setMode('${ledMode.modeId}');">적용</button>
+						</c:if>
 						</div>
 					</div>
 				</div>
@@ -74,13 +76,13 @@
 
 						<c:forEach items="${dimGroupList}" var="dimGroup" varStatus="status">
 						<br/>
-						<div class="form-group">
+						<div class="row margin">
 							<input type="hidden" name="ledModeSettingsList[${status.index}].dimGroup.dimId" value="${dimGroup.dimId}"/>
 							<div class="col-xs-3">
 								<span>${dimGroup.dimName}</span>
 							</div>
 							<div class="col-xs-6">
-								<input id="dimSlider${status.index}" data-slider-id="slider${status.index}" class="set_value_slider" type="text" data-slider-tooltip="hide" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-display-id="dimValue${status.index}"/>
+								<input id="dimSlider${status.index}" data-slider-id="slider${status.index}" class="set_value_slider slider form-control" type="text" data-slider-tooltip="hide" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-orientation="horizontal" data-display-id="dimValue${status.index}"/>
 							</div>
 							<div class="col-xs-3">
 								<input type="number" id="dimValue${status.index}" name="ledModeSettingsList[${status.index}].setValue" min="0" max="100" value="0"/>
@@ -90,9 +92,9 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" aria-hidden="true">취소</button>
-					<button type="button" class="btn btn-primary btn-sm" id="btnSave">저장</button>
-					<button type="button" class="btn btn-info btn-sm" id="btnUpdate">수정</button>
+					<button type="button" class="btn btn-success btn-sm btn-flat btn-cancel" data-dismiss="modal" aria-hidden="true">취소</button>
+					<button type="button" class="btn btn-info btn-sm btn-flat btn-save" id="btnSave">저장</button>
+					<button type="button" class="btn btn-warning btn-sm btn-flat btn-update" id="btnUpdate">수정</button>
 				</div>
 			</div>
 		</div>
@@ -110,6 +112,7 @@
 
 				$('#dimSlider${status.index}').change(function () {
 					$('#' + $(this).attr('data-display-id')).val($(this).val());
+					$(this).slider('setValue', $(this).val() * 1);
 				});
 
 				$('#dimValue${status.index}').on('keyup', function () {
@@ -239,6 +242,15 @@
 				}
 
 				var params = {modeId: modeId}
+
+				$.post('set', params, function (response) {
+					if (response.commonResult.success == true) {
+						alert('선택하신 조명 모드로 설정되었습니다.');
+						pageRefresh();
+					} else {
+						alert(response.commonResult.message);
+					}
+				})
 			}
 		</script>
 	</content>
