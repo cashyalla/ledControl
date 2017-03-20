@@ -1,0 +1,47 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'ledControl'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	runtime('mysql:mysql-connector-java')
+	
+	compile('org.apache.commons:commons-dbcp2:2.1.1')
+	compile('org.apache.commons:commons-lang3:3.5')
+	compile("org.lazyluke:log4jdbc-remix:0.2.7")
+	
+	compile('com.pi4j:pi4j-gpio-extension:1.1')
+	
+	compile('org.sitemesh:sitemesh:3.0.1')
+	compile("javax.servlet:jstl")
+	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+	
+	compile("org.springframework.boot:spring-boot-devtools")
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
