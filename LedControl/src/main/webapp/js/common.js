@@ -47,6 +47,13 @@ $('button.btn-cancel').each(function () {
 	$(this).html(html);
 });
 
+$('button.btn-settings').each(function () {
+	var text = $(this).text();
+	
+	var html = '<i class="glyphicon glyphicon-cog"></i><span>  ' + text + '</span>';
+	$(this).html(html);
+});
+
 $.fn.serializeObject = function () {
     var o = {};
     var a = this.serializeArray();

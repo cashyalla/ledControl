@@ -1,215 +1,256 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>${current.menuName}</title>
-<script type="text/javascript">
-
-	$(document).ready(function () {
-		<c:forEach items="${dimGroupList}" var="dimGroup" varStatus="status">
-		var slider = $('#dimSlider${status.index}').slider();
-
-		$('#dimSlider${status.index}').change(function () {
-			$('#' + $(this).attr('data-display-id')).val($(this).val());
-		});
-
-		$('#dimValue${status.index}').on('keyup', function () {
-			onSetValueChange($(this), 'dimSlider${status.index}');
-		});
-
-		$('#dimValue${status.index}').on('change', function () {
-			onSetValueChange($(this), 'dimSlider${status.index}');
-		});
-		</c:forEach>
-
-		$('#btnSave').click(function () {
-			registerMode();
-		});
-
-		$('#btnUpdate').click(function () {
-			updateMode();
-		});
-	});
-
-	function onSetValueChange(obj, sliderId) {
-		var val = obj.val() * 1;
-
-		console.log('val type : ' + (typeof val));
-
-		if (typeof val === 'number') {
-			$('#' + sliderId).slider('setValue', val);
-		}
-	}
-
-	function resetModeForm() {
-		$('#modeForm')[0].reset();
-		$('.set_value_slider').each(function () {
-			$(this).slider('setValue', 0);
-		})
-	}
-
-	function registerModal() {
-		$('#btnSave').show();
-		$('#btnUpdate').hide();
-		resetModeForm();
-		$('#registerModeModal').modal('show');
-	}
-
-	function registerMode() {
-		var params = $('#modeForm').serializeObject();
-
-		$.post('insert', params, function (response) {
-			if (response.commonResult.success == true) {
-				pageRefresh();
-			} else {
-				alert(response.commonResult.message);
-			}
-		});
-	}
-
-	function updateModal(modeId) {
-		var param = {modeId: modeId}
-
-		$('#modeForm')[0].reset();
-		resetModeForm();
-
-		$.post('get', param, function (response) {
-			if (response.commonResult.success == true) {
-				var ledMode = response.ledMode;
-
-				$('#modeForm input[name="modeId"]').val(ledMode.modeId);
-				$('#modeForm input[name="modeName"]').val(ledMode.modeName);
-				$('#modeForm input[name="description"]').val(ledMode.description);
-
-				for (var i = 0; i < ledMode.ledModeSettingsList.length; i++) {
-					var setValue = ledMode.ledModeSettingsList[i].setValue;
-					$('#dimSlider' + i).slider('setValue', setValue);
-					$('#modeForm input[name="ledModeSettingsList[' + i + '].setValue"]').val(setValue);
-				}
-
-				$('#btnSave').hide();
-				$('#btnUpdate').show();
-				$('#registerModeModal').modal('show');
-			} else {
-				alert(response.commonResult.message);
-			}
-		});
-	}
-
-	function updateMode() {
-
-        var isConfirm = confirm('변경사항을 저장하시겠습니까?');
-        if (isConfirm == false) {
-        	return;
-        }
-
-		var params = $('#modeForm').serializeObject();
-
-		$.post('update', params, function (response) {
-			if (response.commonResult.success == true) {
-				alert('변경사항이 적용되었습니다.');
-				pageRefresh();
-			} else {
-				alert(response.commonResult.message);
-			}
-		});
-	}
-
-	function deleteMode(modeId) {
-        var isConfirm = confirm('선택한 항목을 삭제하시겠습니까?');
-        if (isConfirm == false) {
-        	return;
-        }
-
-        var params = {modeId: modeId}
-
-        $.post('delete', params, function (response) {
-        	if (response.commonResult.success == true) {
-        		alert('삭제되었습니다.');
-        		pageRefresh();
-        	} else {
-        		alert(response.commonResult.message);
-        	}
-        });
-	}
-</script>
+	<title>타이머 관리</title>
+	<!-- Bootstrap time Picker -->
+	<link rel="stylesheet" href="/plugins/timepicker/bootstrap-timepicker.min.css">
 </head>
-<body>
+<body class="hold-transition skin-blue fixed sidebar-mini">
 
-	<div class="row">
-		<h4 class="menu-title">${current.menuName}</h4>
-	</div>
+	<section class="content-header">
+		<h1>타이머 관리</h1>
+	</section>
 
-	<div class="row">
-		<div class="col-md-12">
-			<div class="text-right">
-				<button type="button" class="btn btn-sm btn-primary" onclick="registerModal();">신규 등록</button>
-			</div>
-		</div>
-	</div>
-
-
-	<c:forEach items="${ledModeList}" var="ledMode">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<h3 class="card-header">${ledMode.modeName}</h3>
-				<div class="card-block">
-					<h4 class="card-title">${ledMode.modeName}</h4>
-					<p class="card-text">${ledMode.description}</p> 
-					<div class="text-right">
-						<button type="button" class="btn btn-warning" onclick="updateModal('${ledMode.modeId}');">수정</button>
-						<button type="button" class="btn btn-danger" onclick="deleteMode('${ledMode.modeId}');">삭제</button>
+	<section class="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="box box-info">
+					<div class="box-header with-border">
+						<div class="box-title">타이머 차트</div>
+					</div>
+					<div class="box-body">
+						<div class="chart">
+							<canvas id="timerChart" style="height: 300px;"></canvas>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	</c:forEach>
-
-	<div class="modal fade" id="registerModeModal"  tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">신규 Gpio 핀 등록</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="modeForm">
-						<input type="text" hidden name="modeId"/>
-						<div class="input-group">
-							<span class="input-group-addon" id="mode_name_addon">Mode이름</span>
-							<input type="text" class="form-control" name="modeName" placeholder="Mode이름" aria-describedby="mode_name_addon"/>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-default">
+					<div class="box-header with-border">
+						<div class="pull-right">
+							<button type="button" class="btn btn-primary btn-sm btn-flat btn-add" onclick="addTimerSchedule();">타이머 추가</button>
 						</div>
-						<div class="input-group">
-							<span class="input-group-addon" id="description_addon">Mode설명</span>
-							<input type="text" class="form-control" name="description" placeholder="Mode설명" aria-describedby="description_addon"/>
+					</div>
+					<div class="box-body">
+						<table class="table table-striped">
+							<thead>
+								<tr class="table-info">
+									<th class="text-center">설정시간</th>
+									<c:forEach items="${dimGroupList}" var="dimGroup">
+										<th class="text-center">${dimGroup.dimName}</th>
+									</c:forEach>
+								</tr>
+							</thead>
+							<tbody id="timerScheduleBody">
+								<c:if test="${empty timerScheduleList}">
+									<tr id="rowEmpty">
+										<td colspan="${fn:length(dimGroupList) + 1}" class="text-center">설정된 타이머가 없습니다.</td>
+									</tr>
+								</c:if>
+								<c:forEach items="${timerScheduleList}" var="timerSchedule" varStatus="status">
+									<tr name="timerScheduleData">
+										<td class="text-center">
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<input type="text" name="scheduleTime" class="form-control timepicker timepicker${status.index}"/>
+													<div class="input-group-addon">
+														<i class="fa fa-clock-o"></i>
+													</div>
+												</div>
+											</div>
+										</td>
+										<c:forEach items="${timerSchedule.timerScheduleDetailList}" var="detail">
+										<td class="text-center" name="dimGroup">
+											<input type="text" hidden name="dimId" value="${detail.dimGroup.dimId}"/>
+											<input type="number" name="setValue" value="${detail.setValue}" min="0" max="100"/>
+										</td>
+										</c:forEach>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<div class="box-footer">
+						<div class="pull-right">
+							<button type="button" class="btn btn-sm btn-flat btn-warning btn-save" id="btnSave">저장</button>
 						</div>
-
-						<c:forEach items="${dimGroupList}" var="dimGroup" varStatus="status">
-							<div class="input-group">
-								<input type="hidden" name="ledModeSettingsList[${status.index}].dimGroup.dimId" value="${dimGroup.dimId}"/>
-								<span>${dimGroup.dimName}</span>
-								<input id="dimSlider${status.index}" data-slider-id="slider${status.index}" class="set_value_slider" type="text" data-slider-tooltip="hide" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-display-id="dimValue${status.index}"/>
-								<!-- <span id="dimValue${status.index}" class="text-right">11</span> -->
-								<span class="text-right">
-									<input type="number" id="dimValue${status.index}" name="ledModeSettingsList[${status.index}].setValue" min="0" max="100" value="0"/>
-								</span>
-							</div>
-						</c:forEach>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" aria-hidden="true">취소</button>
-					<button type="button" class="btn btn-primary btn-sm" id="btnSave">저장</button>
-					<button type="button" class="btn btn-info btn-sm" id="btnUpdate">수정</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
+
+	<content tag="end">
+		<!-- bootstrap time picker -->
+		<script src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+		<!-- ChartJS 1.0.1 -->
+		<script src="/plugins/chartjs/Chart.min.js"></script>
+		<script type="text/javascript">
+
+			$(document).ready(function () {
+
+				// 차트 초기화
+				var timerChartCanvas = $('#timerChart').get(0).getContext('2d');
+				var timerChart = new Chart(timerChartCanvas);
+
+				var timerChartData = {
+					labels: [
+					<c:forEach begin="0" end="24" var="i">
+						<c:if test="${i < 10}">
+							"0${i}:00",
+						</c:if>
+						<c:if test="${i >= 10}">
+							"${i}:00",
+						</c:if>
+					</c:forEach>
+					]
+					, datasets: [
+						<c:forEach var="entry" items="${timerChartMap}">
+						{
+							label: "${entry.value[0].name}",
+							fillColor: "${entry.value[0].color}",
+							strokeColor: "${entry.value[0].color}",
+							pointColor: "${entry.value[0].color}",
+							pointStrokeColor: "#c1c7d1",
+							pointHighlightFill: "#fff",
+							pointHighlightStroke: "rgba(220,220,220,1)",
+							data: [
+							<c:forEach items="${entry.value}" var="chartData" varStatus="status">
+								${chartData.value},
+							</c:forEach>
+								${entry.value[0].value}
+							]
+						},
+						</c:forEach>
+					]
+				}
+
+				var timerChartOptions = {
+					//Boolean - If we should show the scale at all
+					showScale: true,
+					//Boolean - Whether grid lines are shown across the chart
+					scaleShowGridLines: false,
+					//String - Colour of the grid lines
+					scaleGridLineColor: "rgba(0,0,0,.05)",
+					//Number - Width of the grid lines
+					scaleGridLineWidth: 1,
+					//Boolean - Whether to show horizontal lines (except X axis)
+					scaleShowHorizontalLines: true,
+					//Boolean - Whether to show vertical lines (except Y axis)
+					scaleShowVerticalLines: true,
+					//Boolean - Whether the line is curved between points
+					bezierCurve: true,
+					//Number - Tension of the bezier curve between points
+					bezierCurveTension: 0.3,
+					//Boolean - Whether to show a dot for each point
+					pointDot: false,
+					//Number - Radius of each point dot in pixels
+					pointDotRadius: 4,
+					//Number - Pixel width of point dot stroke
+					pointDotStrokeWidth: 1,
+					//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+					pointHitDetectionRadius: 20,
+					//Boolean - Whether to show a stroke for datasets
+					datasetStroke: true,
+					//Number - Pixel width of dataset stroke
+					datasetStrokeWidth: 2,
+					//Boolean - Whether to fill the dataset with a color
+					datasetFill: false,
+					//Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+					maintainAspectRatio: true,
+					responsive: true
+				};
+
+				timerChart.Line(timerChartData, timerChartOptions)
+
+				// Time Picker 초기화
+				<c:forEach items="${timerScheduleList}" var="timerSchedule" varStatus="status">
+				$('.timepicker${status.index}').timepicker({
+					showInputs: false
+					, maxHours: 24
+					, showSeconds: false
+					, minuteStep: 1
+					, showMeridian: false
+					, defaultTime: ${timerSchedule.hour} + ':' + ${timerSchedule.minute}
+				});
+				</c:forEach>
+
+				$('#btnSave').click(function () {
+					updateTimerSchedule();
+				})
+			});
+
+			function initTimepicker() {
+			    $(".timepicker").timepicker({
+					showInputs: false
+					, maxHours: 24
+					, showSeconds: false
+					, minuteStep: 1
+					, showMeridian: false
+    			});
+			}
+
+			function addTimerSchedule() {
+				$('#rowEmpty').hide();
+
+				var html = '<tr name="timerScheduleData">';
+				html += '	<td class="text-center">';
+				html += '		<div class="bootstrap-timepicker">';
+				html += '			<div class="input-group">';
+				html += '				<input type="text" name="scheduleTime" class="form-control timepicker"/>';
+				html += '				<div class="input-group-addon">';
+				html += '					<i class="fa fa-clock-o"></i>';
+				html += '				</div>';
+				html += '			</div>';
+				html +=	'		</div>';
+				html += '	</td>';
+				<c:forEach items="${dimGroupList}" var="dimGroup">
+				html += '	<td class="text-center" name="dimGroup">';
+				html += '		<input type="text" hidden name="dimId" value="${dimGroup.dimId}"/>';
+				html += '		<input type="number" name="setValue" value="0" min="0" max="100"/>';
+				html += '	</td>';
+				</c:forEach>
+				html += '</tr>';
+
+				$('#timerScheduleBody').append(html);
+
+				initTimepicker();
+			}
+
+			function updateTimerSchedule() {
+
+				var params = {}
+
+				$('tr[name="timerScheduleData"]').each(function (i) {
+
+					var timepicker = $(this).find('input[name="scheduleTime"]');
+					var timeSplit = timepicker.val().split(':');
+
+					params['timerScheduleList[' + i + '].hour'] = timeSplit[0];
+					params['timerScheduleList[' + i + '].minute'] = timeSplit[1];
+					$(this).find('td[name="dimGroup"]').each(function (j) {
+						params['timerScheduleList[' + i + '].timerScheduleDetailList[' + j + '].dimGroup.dimId'] = $(this).find('input[name="dimId"]').val();
+						params['timerScheduleList[' + i + '].timerScheduleDetailList[' + j + '].setValue'] = $(this).find('input[name="setValue"]').val();
+					});
+				});
+
+				$.post('update', params, function (response) {
+					if (response.commonResult.success == true) {
+						alert('타이머 스케쥴이 저장되었습니다.');
+						pageRefresh();
+					} else {
+						alert(response.commonResult.message);
+					}
+				});
+			}
+		</script>
+	</content>
 </body>
 </html>

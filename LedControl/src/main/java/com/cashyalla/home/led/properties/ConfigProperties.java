@@ -17,7 +17,11 @@ public class ConfigProperties {
 
 	private String modeCycle;
 
+	private String modeTest;
+
 	private Integer termChangeBrightness;
+
+	private Integer rangeOfPwm;
 
 	public String getSeqMode() {
 		return seqMode;
@@ -59,12 +63,28 @@ public class ConfigProperties {
 		this.modeCycle = modeCycle;
 	}
 
+	public String getModeTest() {
+		return modeTest;
+	}
+
+	public void setModeTest(String modeTest) {
+		this.modeTest = modeTest;
+	}
+
 	public Integer getTermChangeBrightness() {
 		return termChangeBrightness;
 	}
 
 	public void setTermChangeBrightness(Integer termChangeBrightness) {
 		this.termChangeBrightness = termChangeBrightness;
+	}
+
+	public Integer getRangeOfPwm() {
+		return rangeOfPwm;
+	}
+
+	public void setRangeOfPwm(Integer ragneOfPwm) {
+		this.rangeOfPwm = ragneOfPwm;
 	}
 
 }

@@ -41,10 +41,12 @@ public interface LedControlDao {
 	DimDetail getDimDetail(DimDetail dimDetail);
 	
 	DimDetail getDimDetailByPinSeq(DimDetail dimDetail);
+	
+	List<DimDetail> getDimDetailListByDimGroup(DimGroup dimGroup);
 
 	void removeDimDetail(DimDetail dimDetail);
 
-	List<LedMode> getLedModeList();
+	List<LedMode> getLedModeList(String displayYn);
 	
 	LedMode getLedMode(LedMode ledMode);
 
@@ -67,5 +69,9 @@ public interface LedControlDao {
 	void removeCurrentLedMode();
 
 	List<CurrentBrightness> getCurrentBrightness();
+
+	void removeCurrentBrightness();
+
+	void saveCurrentBrightness(List<CurrentBrightness> currentBrightnessList);
 
 }

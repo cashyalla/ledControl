@@ -28,6 +28,9 @@ public class LedControlService {
 	private SequenceService sequenceService;
 	
 	@Autowired
+	private DimmingService dimmingService;
+	
+	@Autowired
 	private LedControlDao ledControlDao;
 	
 	@Autowired
@@ -231,6 +234,19 @@ public class LedControlService {
 	}
 	
 	/**
+	 * 디밍 그룹의 상세 리스트 조회
+	 * @param dimGrouop
+	 * @return
+	 */
+	public List<DimDetail> getDimDetailListByDimGroup(DimGroup dimGroup) {
+		if (dimGroup == null || StringUtils.isEmpty(dimGroup.getDimId()) == true) {
+			throw new RuntimeException("조회 대상 디밍 그룹을 선택해주세요.");
+		}
+		
+		return ledControlDao.getDimDetailListByDimGroup(dimGroup);
+	}
+	
+	/**
 	 * 디밍 상세 등록
 	 * @param dimDetail
 	 */
@@ -288,7 +304,7 @@ public class LedControlService {
 	 * @return
 	 */
 	public List<LedMode> getLedModeList() {
-		return ledControlDao.getLedModeList();
+		return ledControlDao.getLedModeList("Y");
 	}
 	
 	/**
@@ -439,6 +455,9 @@ public class LedControlService {
 		// 새로 설정하려는 조명 모드 저장
 		ledControlDao.saveCurrentLedMode(currentLedMode);
 		
+		// 밝기 변경
+		dimmingService.changeBrightness(ledMode);
+		
 	}
 	
 	/**
@@ -447,6 +466,17 @@ public class LedControlService {
 	 */
 	public List<CurrentBrightness> getCurrentBrightness() {
 		return ledControlDao.getCurrentBrightness();
+	}
+	
+	@Transactional
+	public void updateCurrentBrightness(List<CurrentBrightness> currentBrightnessList) {
+		
+		// 기존 저장 된 밝기값 삭제
+		ledControlDao.removeCurrentBrightness();
+		
+		// 신규 밝기값 저장
+		ledControlDao.saveCurrentBrightness(currentBrightnessList);
+		
 	}
 
 }

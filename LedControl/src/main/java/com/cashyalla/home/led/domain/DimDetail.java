@@ -9,54 +9,29 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DimDetail {
 
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Integer seq;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dimId", referencedColumnName = "dimId", updatable = false)
+	@Getter @Setter
 	private DimGroup dimGroup;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "pinSeq")
+	@Getter @Setter
 	private GpioPinInfo gpioPinInfo;
 
+	@Getter @Setter
 	private String useYn;
-
-	public Integer getSeq() {
-		return seq;
-	}
-
-	public void setSeq(Integer seq) {
-		this.seq = seq;
-	}
-
-	public DimGroup getDimGroup() {
-		return dimGroup;
-	}
-
-	public void setDimGroup(DimGroup dimGroup) {
-		this.dimGroup = dimGroup;
-	}
-
-	public GpioPinInfo getGpioPinInfo() {
-		return gpioPinInfo;
-	}
-
-	public void setGpioPinInfo(GpioPinInfo gpioPinInfo) {
-		this.gpioPinInfo = gpioPinInfo;
-	}
-
-	public String getUseYn() {
-		return useYn;
-	}
-
-	public void setUseYn(String useYn) {
-		this.useYn = useYn;
-	}
 
 }

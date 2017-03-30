@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.cashyalla.home.led.properties.DataSourceProperties;
 
@@ -15,13 +16,14 @@ import net.sf.log4jdbc.tools.Log4JdbcCustomFormatter;
 import net.sf.log4jdbc.tools.LoggingType;
 
 @SpringBootApplication
+@EnableScheduling
 @PropertySource({"classpath:datasource.properties", "classpath:config.properties"})
 public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-	
+
 	@Bean
 	public DataSource dataSource(DataSourceProperties jdbcProperties) {
 		

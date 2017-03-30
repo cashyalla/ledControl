@@ -2,6 +2,7 @@ package com.cashyalla.home.led.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -120,13 +121,24 @@ public class LedControlDaoJpa implements LedControlDao {
 	}
 	
 	@Override
+	public List<DimDetail> getDimDetailListByDimGroup(DimGroup dimGroup) {
+		return dimDetailRepository.findByDimGroup(dimGroup);
+	}
+	
+	@Override
 	public void removeDimDetail(DimDetail dimDetail) {
 		dimDetailRepository.delete(dimDetail);
 	}
 	
 	@Override
-	public List<LedMode> getLedModeList() {
-		return ledModeRepository.findAll();
+	public List<LedMode> getLedModeList(String displayYn) {
+		
+		if (StringUtils.isEmpty(displayYn) == true) {
+			return ledModeRepository.findAll();		
+		} else {
+			return ledModeRepository.findByDisplayYn(displayYn);
+		}
+		
 	}
 	
 	@Override
@@ -185,6 +197,17 @@ public class LedControlDaoJpa implements LedControlDao {
 	@Override
 	public List<CurrentBrightness> getCurrentBrightness() {
 		return currentBrightnessRepository.findAll();
+	}
+	
+	@Override
+	public void removeCurrentBrightness() {
+		currentBrightnessRepository.deleteAll();
+		currentBrightnessRepository.flush();
+	}
+	
+	@Override
+	public void saveCurrentBrightness(List<CurrentBrightness> currentBrightnessList) {
+		currentBrightnessRepository.save(currentBrightnessList);
 	}
 	
 }

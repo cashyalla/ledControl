@@ -1,5 +1,7 @@
 package com.cashyalla.home.led.dao.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.cashyalla.home.led.domain.DimDetail;
@@ -11,5 +13,7 @@ public interface DimDetailRepository extends JpaRepository<DimDetail, Integer> {
 	void deleteByDimGroup(DimGroup dimGroup);
 	
 	DimDetail findByGpioPinInfo(GpioPinInfo gpioPinInfo);
+	
+	List<DimDetail> findByDimGroup(DimGroup dimGroup);
 	
 }

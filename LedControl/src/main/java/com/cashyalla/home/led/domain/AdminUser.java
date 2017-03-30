@@ -7,50 +7,25 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 public class AdminUser {
 
 	@Id
+	@Getter @Setter
 	private String adminId;
 
+	@Getter @Setter
 	private String password;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Getter @Setter
 	private Date crtDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Getter @Setter
 	private Date loginDate;
-
-	public String getAdminId() {
-		return adminId;
-	}
-
-	public void setAdminId(String adminId) {
-		this.adminId = adminId;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Date getCrtDate() {
-		return crtDate;
-	}
-
-	public void setCrtDate(Date crtDate) {
-		this.crtDate = crtDate;
-	}
-
-	public Date getLoginDate() {
-		return loginDate;
-	}
-
-	public void setLoginDate(Date loginDate) {
-		this.loginDate = loginDate;
-	}
 
 }

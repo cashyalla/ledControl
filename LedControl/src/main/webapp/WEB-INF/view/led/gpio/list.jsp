@@ -13,16 +13,13 @@
 
 	<section class="content">
 		<div class="row">
-			<div class="col-lg-12">
-				<div class="pull-right">
-					<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
 			<div class="col-md-12">
 				<div class="box">
+					<div class="box-header">
+						<div class="pull-right">
+							<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
+						</div>
+					</div>
 					<div class="box-body no-padding">
 						<table class="table table-striped">
 							<thead>

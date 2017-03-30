@@ -10,92 +10,39 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 public class Menu {
 
 	@Id
+	@Getter @Setter
 	private String menuId;
 
+	@Getter @Setter
 	private String menuName;
 
+	@Getter @Setter
 	private String menuUrl;
 
+	@Getter @Setter
 	private int sortNo;
 
+	@Getter @Setter
 	private String useYn;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
+	@Getter @Setter
 	private Date crtDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Getter @Setter
 	private Date updDate;
 
 	@Transient
+	@Getter @Setter
 	private List<Menu> menus;
-
-	public String getMenuId() {
-		return menuId;
-	}
-
-	public void setMenuId(String menuId) {
-		this.menuId = menuId;
-	}
-
-	public String getMenuName() {
-		return menuName;
-	}
-
-	public void setMenuName(String menuName) {
-		this.menuName = menuName;
-	}
-
-	public String getMenuUrl() {
-		return menuUrl;
-	}
-
-	public void setMenuUrl(String menuUrl) {
-		this.menuUrl = menuUrl;
-	}
-
-	public int getSortNo() {
-		return sortNo;
-	}
-
-	public void setSortNo(int sortNo) {
-		this.sortNo = sortNo;
-	}
-
-	public String getUseYn() {
-		return useYn;
-	}
-
-	public void setUseYn(String useYn) {
-		this.useYn = useYn;
-	}
-
-	public Date getCrtDate() {
-		return crtDate;
-	}
-
-	public void setCrtDate(Date crtDate) {
-		this.crtDate = crtDate;
-	}
-
-	public Date getUpdDate() {
-		return updDate;
-	}
-
-	public void setUpdDate(Date updDate) {
-		this.updDate = updDate;
-	}
-
-	public List<Menu> getMenus() {
-		return menus;
-	}
-
-	public void setMenus(List<Menu> menus) {
-		this.menus = menus;
-	}
 
 }

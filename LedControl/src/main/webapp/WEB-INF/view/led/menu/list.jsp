@@ -5,101 +5,8 @@
 <html>
 <head>
 <title>메뉴 관리</title>
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('#btnNew').click(function () {
-			$('#registerMenuModal').modal('show');
-		});
-
-		$('#btnSave').click(function () {
-			var params = $('#menuForm').serializeObject();
-
-			$.post('insert', params, function (response) {
-				if (response.commonResult.success == true) {
-					pageRefresh();
-				} else {
-					alert(response.commonResult.message);
-				}
-			});
-		});
-
-		$('#btnUpdate').click(function () {
-			update();
-		});
-
-		$('#btnDelete').click(function () {
-			remove();
-		});
-
-		$('#modifyForm input[type=text], #modifyForm select').change(function () {
-			$(this).parents('tr').find('input[type=checkbox]').attr('checked', true);
-		});
-	});
-
-	function getCheckedItems() {
-        var params = {};
-
-        $('#modifyForm input:checked').each(function(i) {
-        	params['menus[' + i + '].menuId'] = $(this).parents('tr').find('input[name=menuId]').val();
-        	params['menus[' + i + '].menuName'] = $(this).parents('tr').find('input[name=menuName]').val();
-        	params['menus[' + i + '].menuUrl'] = $(this).parents('tr').find('input[name=menuUrl]').val();
-        	params['menus[' + i + '].sortNo'] = $(this).parents('tr').find('input[name=sortNo]').val();
-        	params['menus[' + i + '].useYn'] = $(this).parents('tr').find('select[name=useYn]').val();
-        });
-
-        return params;
-	}
-
-	function update() {
-
-        if ($('#modifyForm input:checked').length <= 0) {
-            alert('수정할 항목이 없습니다.');
-            return;
-        }
-
-        var isConfirm = confirm('선택한 항목을 수정하시겠습니까?');
-        if (isConfirm == false) {
-        	return;
-        }
-
-        var params = getCheckedItems();
-
-        $.post('update', params, function (response) {
-        	if (response.commonResult.success == true) {
-        		alert('변경사항이 적용되었습니다.');
-        		pageRefresh();
-        	} else {
-        		alert(response.commonResult.message);
-        	}
-        });
-	}
-
-	function remove() {
-
-        if ($('#modifyForm input:checked').length <= 0) {
-            alert('삭제할 항목이 없습니다.');
-            return;
-        }
-
-        var isConfirm = confirm('선택한 항목을 삭제하시겠습니까?');
-        if (isConfirm == false) {
-        	return;
-        }
-
-        var params = getCheckedItems();
-
-        $.post('delete', params, function (response) {
-        	if (response.commonResult.success == true) {
-        		alert('삭제되었습니다.');
-        		pageRefresh();
-        	} else {
-        		alert(response.commonResult.message);
-        	}
-        });
-	}
-</script>
 </head>
-<body>
+<body class="hold-transition skin-blue fixed sidebar-mini">
 	<div class="row">
 		<h4 class="menu-title">${current.menuName}</h4>
 	</div>
@@ -209,5 +116,100 @@
 			</div>
 		</div>
 	</div>
+	<content tag="end">
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('#btnNew').click(function () {
+					$('#registerMenuModal').modal('show');
+				});
+
+				$('#btnSave').click(function () {
+					var params = $('#menuForm').serializeObject();
+
+					$.post('insert', params, function (response) {
+						if (response.commonResult.success == true) {
+							pageRefresh();
+						} else {
+							alert(response.commonResult.message);
+						}
+					});
+				});
+
+				$('#btnUpdate').click(function () {
+					update();
+				});
+
+				$('#btnDelete').click(function () {
+					remove();
+				});
+
+				$('#modifyForm input[type=text], #modifyForm select').change(function () {
+					$(this).parents('tr').find('input[type=checkbox]').attr('checked', true);
+				});
+			});
+
+			function getCheckedItems() {
+		        var params = {};
+
+		        $('#modifyForm input:checked').each(function(i) {
+		        	params['menus[' + i + '].menuId'] = $(this).parents('tr').find('input[name=menuId]').val();
+		        	params['menus[' + i + '].menuName'] = $(this).parents('tr').find('input[name=menuName]').val();
+		        	params['menus[' + i + '].menuUrl'] = $(this).parents('tr').find('input[name=menuUrl]').val();
+		        	params['menus[' + i + '].sortNo'] = $(this).parents('tr').find('input[name=sortNo]').val();
+		        	params['menus[' + i + '].useYn'] = $(this).parents('tr').find('select[name=useYn]').val();
+		        });
+
+		        return params;
+			}
+
+			function update() {
+
+		        if ($('#modifyForm input:checked').length <= 0) {
+		            alert('수정할 항목이 없습니다.');
+		            return;
+		        }
+
+		        var isConfirm = confirm('선택한 항목을 수정하시겠습니까?');
+		        if (isConfirm == false) {
+		        	return;
+		        }
+
+		        var params = getCheckedItems();
+
+		        $.post('update', params, function (response) {
+		        	if (response.commonResult.success == true) {
+		        		alert('변경사항이 적용되었습니다.');
+		        		pageRefresh();
+		        	} else {
+		        		alert(response.commonResult.message);
+		        	}
+		        });
+			}
+
+			function remove() {
+
+		        if ($('#modifyForm input:checked').length <= 0) {
+		            alert('삭제할 항목이 없습니다.');
+		            return;
+		        }
+
+		        var isConfirm = confirm('선택한 항목을 삭제하시겠습니까?');
+		        if (isConfirm == false) {
+		        	return;
+		        }
+
+		        var params = getCheckedItems();
+
+		        $.post('delete', params, function (response) {
+		        	if (response.commonResult.success == true) {
+		        		alert('삭제되었습니다.');
+		        		pageRefresh();
+		        	} else {
+		        		alert(response.commonResult.message);
+		        	}
+		        });
+			}
+		</script>
+	</content>
 </body>
 </html>

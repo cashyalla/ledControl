@@ -7,50 +7,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 public class GpioPinInfo {
 
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Integer seq;
 
+	@Getter @Setter
 	private int pinNumber;
 
+	@Getter @Setter
 	private String description;
 
 	@Transient
+	@Getter @Setter
 	private List<GpioPinInfo> gpioPinInfos;
-
-	public Integer getSeq() {
-		return seq;
-	}
-
-	public void setSeq(Integer seq) {
-		this.seq = seq;
-	}
-
-	public int getPinNumber() {
-		return pinNumber;
-	}
-
-	public void setPinNumber(int pinNumber) {
-		this.pinNumber = pinNumber;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public List<GpioPinInfo> getGpioPinInfos() {
-		return gpioPinInfos;
-	}
-
-	public void setGpioPinInfos(List<GpioPinInfo> gpioPinInfos) {
-		this.gpioPinInfos = gpioPinInfos;
-	}
 
 }

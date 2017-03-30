@@ -42,6 +42,9 @@
 							<button type="button" class="btn btn-warning btn-sm btn-flat btn-update" onclick="updateModal('${ledMode.modeId}');">수정</button>
 							<button type="button" class="btn btn-danger btn-sm btn-flat btn-delete" onclick="deleteMode('${ledMode.modeId}');">삭제</button>
 						</c:if>
+						<c:if test="${ledMode.modeId eq config.modeSchedule}">
+							<button type="button" class="btn btn-warning btn-sm btn-flat btn-settings" onclick="goPage('/led/timer/list');">설정</button>
+						</c:if>
 						<c:if test="${ledMode.modeId ne currentLedMode.modeId}">
 							<button type="button" class="btn btn-primary btn-sm btn-flat btn-ok" onclick="setMode('${ledMode.modeId}');">적용</button>
 						</c:if>
@@ -109,6 +112,10 @@
 			$(document).ready(function () {
 				<c:forEach items="${dimGroupList}" var="dimGroup" varStatus="status">
 				var slider = $('#dimSlider${status.index}').slider();
+
+				<c:if test="${!empty dimGroup.color}">
+				$('#slider${status.index} .slider-track .slider-selection').css('background', '${dimGroup.color}');
+				</c:if>
 
 				$('#dimSlider${status.index}').change(function () {
 					$('#' + $(this).attr('data-display-id')).val($(this).val());

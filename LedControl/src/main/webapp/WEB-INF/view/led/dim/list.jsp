@@ -5,6 +5,8 @@
 <html>
 <head>
 <title>${current.menuName}</title>
+	<!-- Bootstrap Color Picker -->
+	<link rel="stylesheet" href="/plugins/colorpicker/bootstrap-colorpicker.min.css">
 </head>
 <body class="hold-transition skin-blue fixed sidebar-mini">
 	<section class="content-header">
@@ -13,61 +15,63 @@
 
 	<section class="content">
 		<div class="row">
-			<div class="col-lg-12">
-				<div class="pull-right">
-					<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
-				</div>
-			</div>
-		</div>
-		<div class="row">
 			<div class="col-md-12">
-				<table class="table table-striped">
-					<thead>
-						<tr class="table-info">
-							<td class="td-col-2">DIM ID</td>
-							<td class="td-col-2">DIM 이름</td>
-							<td class="td-col-7">DIM 설명</td>
-							<td class="td-col-1">사용여부</td>
-							<td class="td-col-1">수정</td>
-							<td class="td-col-1">핀 추가</td>
-							<td class="td-col-1">삭제</td>
-						</tr>
-					</thead>
-					<tbody>
-					<c:if test="${empty dimGroupList}">
-						<tr>
-							<td colspan="7" class="text-center">조회된 항목이 없습니다.</td>
-						</tr>
-					</c:if>
-					<c:forEach items="${dimGroupList}" var="dimGroup">
-						<tr>
-							<td>
-								<input type="hidden" name="dimId" value="${dimGroup.dimId}"/>
-								${dimGroup.dimId}
-							</td>
-							<td>${dimGroup.dimName}</td>
-							<td>${dimGroup.description}</td>
-							<td>${dimGroup.useYn}</td>
-							<td><button type="button" class="btn btn-sm btn-success btn-update" onclick="updateModal('${dimGroup.dimId}');">수정</button></td>
-							<td><button type="button" class="btn btn-sm btn-warning btn-add" onclick="registerDimDetailModal('${dimGroup.dimId}');">핀 추가</button></td>
-							<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimGroup('${dimGroup.dimId}');">삭제</button></td>
-						</tr>
-						<c:forEach items="${dimGroup.dimDetails}" var="dimDetail">
-							<tr>
-								<td colspan="2">
-									<input type="hidden" name="seq" value="${dimDetail.seq}"/>
-									┗ 핀 번호 : ${dimDetail.gpioPinInfo.pinNumber}
-								</td>
-								<td colspan="3">
-									핀 설명 : ${dimDetail.gpioPinInfo.description}
-								</td>
-								<td><button type="button" class="btn btn-sm btn-info btn-update" onclick="updateDimDetailModal('${dimDetail.seq}');">수정</button></td>
-								<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimDetail('${dimDetail.seq}');">삭제</button></td>
-							</tr>
-						</c:forEach>
-					</c:forEach>
-					</tbody>
-				</table>
+				<div class="box">
+					<div class="box-header">
+						<div class="pull-right">
+							<button type="button" class="btn btn-sm btn-flat btn-primary btn-add" id="btnNew">신규 등록</button>
+						</div>
+					</div>
+					<div class="box-body no-padding">
+						<table class="table table-striped">
+							<thead>
+								<tr class="table-info">
+									<th>DIM ID</th>
+									<th>DIM 이름</th>
+									<th>DIM 설명</th>
+									<th>사용여부</th>
+									<th>수정</th>
+									<th>핀 추가</th>
+									<th>삭제</th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:if test="${empty dimGroupList}">
+								<tr>
+									<td colspan="7" class="text-center">조회된 항목이 없습니다.</td>
+								</tr>
+							</c:if>
+							<c:forEach items="${dimGroupList}" var="dimGroup">
+								<tr>
+									<td>
+										<input type="hidden" name="dimId" value="${dimGroup.dimId}"/>
+										${dimGroup.dimId}
+									</td>
+									<td>${dimGroup.dimName}</td>
+									<td>${dimGroup.description}</td>
+									<td>${dimGroup.useYn}</td>
+									<td><button type="button" class="btn btn-sm btn-success btn-update" onclick="updateModal('${dimGroup.dimId}');">수정</button></td>
+									<td><button type="button" class="btn btn-sm btn-warning btn-add" onclick="registerDimDetailModal('${dimGroup.dimId}');">핀 추가</button></td>
+									<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimGroup('${dimGroup.dimId}');">삭제</button></td>
+								</tr>
+								<c:forEach items="${dimGroup.dimDetails}" var="dimDetail">
+									<tr>
+										<td colspan="2">
+											<input type="hidden" name="seq" value="${dimDetail.seq}"/>
+											┗ 핀 번호 : ${dimDetail.gpioPinInfo.pinNumber}
+										</td>
+										<td colspan="3">
+											핀 설명 : ${dimDetail.gpioPinInfo.description}
+										</td>
+										<td><button type="button" class="btn btn-sm btn-info btn-update" onclick="updateDimDetailModal('${dimDetail.seq}');">수정</button></td>
+										<td><button type="button" class="btn btn-sm btn-danger btn-delete" onclick="removeDimDetail('${dimDetail.seq}');">삭제</button></td>
+									</tr>
+								</c:forEach>
+							</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -92,6 +96,16 @@
 							<span class="input-group-addon" id="description_addon">디밍 그룹 설명</span>
 							<input type="text" class="form-control" name="description" placeholder="디밍 그룹 설명" aria-describedby="description_addon"/>
 						</div>
+              <!-- Color Picker -->
+              			<div class="form-group">
+                			<label>Color picker with addon:</label>
+                			<div class="input-group" id="dimGroupColorPicker">
+                  				<input type="text" class="form-control" name="color">
+								<div class="input-group-addon">
+                    				<i></i>
+                  				</div>
+                			</div>
+                		</div>
 						<div class="form-group">
 							<span class="input-group-addon" id="use_yn_addon">사용여부</span>
 							<select class="form-control" name="useYn" aria-describedby="use_yn_addon">
@@ -149,8 +163,13 @@
 		</div>
 	</div>
 	<content tag="end">
+		<!-- bootstrap color picker -->
+		<script src="../../plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function () {
+
+				$("#dimGroupColorPicker").colorpicker();
+
 				$('#btnNew').click(function () {
 					$('#registerDimGroupTitle').text('신규 디밍 그룹 등록');
 					$('#dimGroupForm')[0].reset();
