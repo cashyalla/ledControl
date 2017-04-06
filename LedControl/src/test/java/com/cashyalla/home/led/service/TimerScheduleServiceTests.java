@@ -21,10 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest
 @Transactional
 public class TimerScheduleServiceTests {
-	
+
 	@Autowired
 	private TimerScheduleService timerScheduleService;
-	
+
 	@Test
 	public void getTimerChartDataTest() {
 		Map<String, List<TimerChartData>> map = timerScheduleService.getTimerChartData();

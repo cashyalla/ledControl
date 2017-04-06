@@ -3,6 +3,9 @@ package com.cashyalla.home.led.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import lombok.Data;
+
+@Data
 @Component
 @ConfigurationProperties
 public class ConfigProperties {
@@ -22,69 +25,5 @@ public class ConfigProperties {
 	private Integer termChangeBrightness;
 
 	private Integer rangeOfPwm;
-
-	public String getSeqMode() {
-		return seqMode;
-	}
-
-	public void setSeqMode(String seqMode) {
-		this.seqMode = seqMode;
-	}
-
-	public String getSeqDim() {
-		return seqDim;
-	}
-
-	public void setSeqDim(String seqDim) {
-		this.seqDim = seqDim;
-	}
-
-	public String getModeSchedule() {
-		return modeSchedule;
-	}
-
-	public void setModeSchedule(String modeSchedule) {
-		this.modeSchedule = modeSchedule;
-	}
-
-	public String getModeManual() {
-		return modeManual;
-	}
-
-	public void setModeManual(String modeManual) {
-		this.modeManual = modeManual;
-	}
-
-	public String getModeCycle() {
-		return modeCycle;
-	}
-
-	public void setModeCycle(String modeCycle) {
-		this.modeCycle = modeCycle;
-	}
-
-	public String getModeTest() {
-		return modeTest;
-	}
-
-	public void setModeTest(String modeTest) {
-		this.modeTest = modeTest;
-	}
-
-	public Integer getTermChangeBrightness() {
-		return termChangeBrightness;
-	}
-
-	public void setTermChangeBrightness(Integer termChangeBrightness) {
-		this.termChangeBrightness = termChangeBrightness;
-	}
-
-	public Integer getRangeOfPwm() {
-		return rangeOfPwm;
-	}
-
-	public void setRangeOfPwm(Integer ragneOfPwm) {
-		this.rangeOfPwm = ragneOfPwm;
-	}
 
 }

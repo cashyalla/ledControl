@@ -152,6 +152,43 @@ public class DimmingService {
 		}
 	}
 	
+	/**
+	 * 현재 피밍 그룹의 밝기를 조정함. 
+	 * @param brightness
+	 */
+	@Transactional
+	public void changeBrightness(CurrentBrightness brightness) {
+		List<CurrentBrightness> currentBrightnessList = ledControlService.getCurrentBrightness();
+		List<GpioPwm> pwmList = new ArrayList<>();
+		
+		for (CurrentBrightness currentBrightness : currentBrightnessList) {
+			
+			int value;
+			
+			if (currentBrightness.getDimGroup().getDimId().equals(brightness.getDimGroup().getDimId()) == true) {
+				value = brightness.getValue();
+			} else {
+				value = currentBrightness.getValue();
+			}
+			
+			currentBrightness.setValue(value);
+			
+			for (DimDetail dimDetail : currentBrightness.getDimGroup().getDimDetails()) {
+				GpioPwm pwm = new GpioPwm();
+				pwm.setPinNumber(dimDetail.getGpioPinInfo().getPinNumber());
+				pwm.setValue(value);
+				
+				pwmList.add(pwm);
+			}
+			
+		}
+		
+		
+		// 밝기 조정
+		setBrightness(pwmList);
+		
+	}
+	
 	public void setBrightness(List<GpioPwm> pwmList) {
 		synchronized (monitor) {
 			setPwm(pwmList);
@@ -162,7 +199,7 @@ public class DimmingService {
 //		Gpio.wiringPiSetup();
 		
 		for (GpioPwm pwm : pwmList) {
-			logger.info("\nPWM\n{}", ToStringBuilder.reflectionToString(pwm, ToStringStyle.MULTI_LINE_STYLE));
+//			logger.info("\nPWM\n{}", ToStringBuilder.reflectionToString(pwm, ToStringStyle.MULTI_LINE_STYLE));
 //			SoftPwm.softPwmCreate(pwm.getPinNumber(), pwm.getValue(), configProperties.getRangeOfPwm());
 		}
 	}

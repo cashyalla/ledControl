@@ -1,6 +1,7 @@
 package com.cashyalla.home.led.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,7 +18,7 @@ public class CurrentBrightness {
 	@Getter @Setter
 	private int seq;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dimId", referencedColumnName = "dimId")
 	@Getter @Setter
 	private DimGroup dimGroup;

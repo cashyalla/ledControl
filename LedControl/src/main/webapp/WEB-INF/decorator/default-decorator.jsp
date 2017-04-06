@@ -70,7 +70,13 @@
 	    	<c:forEach items="${menuList}" var="menu">
 	    		<li>
 	    			<a href="${menu.menuUrl}">
-	    				<i class="fa fa-lightbulb-o"></i><span>${menu.menuName}</span>
+	    				<c:if test="${!empty menu.icon}">
+	    					<i class="${menu.icon}">
+	    				</c:if>
+	    				<c:if test="${empty menu.icon}">
+	    					<i class="fa fa-lightbulb-o">
+	    				</c:if>
+	    				</i><span>${menu.menuName}</span>
 	    			</a>
 	    		</li>
 	    	</c:forEach>

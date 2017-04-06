@@ -51,7 +51,21 @@ public class TimerController {
 			timerScheduleService.updateTimerSchedule(timerSchedule);
 			modelMap.addAttribute(new CommonResult(true));
 		} catch (Exception e) {
-			e.printStackTrace();
+			modelMap.addAttribute(new CommonResult(e));
+		}
+		
+		return modelMap;
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelMap delete(TimerSchedule timerSchedule) {
+		ModelMap modelMap = new ModelMap();
+		
+		try {
+			timerScheduleService.deleteTimerSchedule(timerSchedule);
+			modelMap.addAttribute(new CommonResult(true));
+		} catch (Exception e) {
 			modelMap.addAttribute(new CommonResult(e));
 		}
 		

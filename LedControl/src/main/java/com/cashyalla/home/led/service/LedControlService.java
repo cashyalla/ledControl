@@ -456,7 +456,11 @@ public class LedControlService {
 		ledControlDao.saveCurrentLedMode(currentLedMode);
 		
 		// 밝기 변경
-		dimmingService.changeBrightness(ledMode);
+		// 타이머 혹은 수동으로 변경하면 밝기조정 하지않음
+		if (currentLedMode.getModeId().equals(configProperties.getModeSchedule()) == false
+				&& currentLedMode.getModeId().equals(configProperties.getModeManual()) == false) {
+			dimmingService.changeBrightness(ledMode);	
+		}
 		
 	}
 	

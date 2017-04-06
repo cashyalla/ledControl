@@ -11,8 +11,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,7 @@ public class TimerScheduleService {
 	public List<TimerSchedule> getTimerScheduleList() {
 		return timerScheduleDao.getTimerScheduleList();
 	}
-	
+
 	public Map<String, List<TimerChartData>> getTimerChartData() {
 		
 		List<TimerSchedule> timerScheduleList = getTimerScheduleList();
@@ -122,10 +120,6 @@ public class TimerScheduleService {
 			long prevTime = prevSchedule.getScheduleTime().getTime();
 			long nextTime = nextSchedule.getScheduleTime().getTime();
 			
-			log.info("prevTime : {}", prevTime);
-			log.info("nextTime : {}", nextTime);
-			log.info("chartTime : {}", chartTime);
-			
 			// 차트 시간이 다음 스케쥴 시간보다 크다면 다음으로
 			if (nextTime < chartTime) {
 				i--;
@@ -135,37 +129,43 @@ public class TimerScheduleService {
 				if (nextScheduleIndex >= timerScheduleList.size()) {
 					prevScheduleIndex = timerScheduleList.size() - 1;
 					nextScheduleIndex = 0;
+					// 첫번째 인덱스로 다시 바뀐다면 다음 스케쥴에 24시간을 더해준다.
+					Date nextTimeDate = timerScheduleList.get(nextScheduleIndex).getScheduleTime();
+					nextTimeDate.setTime(nextTimeDate.getTime() + millisOfDay);
+					timerScheduleList.get(nextScheduleIndex).setScheduleTime(nextTimeDate);
 				}
 				
 				if (prevScheduleIndex >= timerScheduleList.size()) {
 					prevScheduleIndex = 0;
 				}
 				
-				log.info("prevScheduleIndex : {}", prevScheduleIndex);
-				log.info("nextScheduleIndex : {}", nextScheduleIndex);
-				
 				continue;
 			}
-			
+
 			chartDate = new Date(chartTime);
-			
+			long tempChartTime = chartTime;
+
 			if (prevTime > nextTime) {
 				nextTime += millisOfDay;
 			}
+			
+			if (prevTime > tempChartTime) {
+				tempChartTime += millisOfDay;
+			}
 
 			long termOfSchedule = nextTime - prevTime;
-			double scale = (double) (chartTime - prevTime) / (double) termOfSchedule;
-			
+			double scale = (double) (tempChartTime - prevTime) / (double) termOfSchedule;
+
 			for (TimerScheduleDetail prevDetail : prevSchedule.getTimerScheduleDetailList()) {
 				for (TimerScheduleDetail nextDetail : nextSchedule.getTimerScheduleDetailList()) {
 					if (prevDetail.getDimGroup().getDimId().equals(nextDetail.getDimGroup().getDimId()) == true) {
-						
+
 						DimGroup dimGroup = prevDetail.getDimGroup();
-						
+
 						if (chartDataMap.get(dimGroup.getDimId()) == null) {
 							chartDataMap.put(dimGroup.getDimId(), new ArrayList<>());
 						}
-						
+
 						TimerChartData chartData = new TimerChartData();
 						chartData.setColor(dimGroup.getColor());
 						chartData.setTime(timeFormat.format(chartDate));
@@ -173,11 +173,11 @@ public class TimerScheduleService {
 						
 						int increaseValue = (int) (scale * (double) (nextDetail.getSetValue() - prevDetail.getSetValue()));
 						
-						log.info("prevValue : {}", prevDetail.getSetValue());
-						log.info("nextValue : {}", nextDetail.getSetValue());
-						log.info("increaseValue : {}", increaseValue);
-						
 						chartData.setValue(prevDetail.getSetValue() + increaseValue);
+						
+						if (chartData.getValue() < 0) {
+							chartData.setValue(0);
+						}
 						
 						chartDataMap.get(dimGroup.getDimId()).add(chartData);
 						
@@ -224,7 +224,7 @@ public class TimerScheduleService {
 
 		// 기존 설정값 삭제
 		timerScheduleDao.removeTimerScheduleAll();
-		
+
 		// 기존 상세 설정값 삭제
 		timerScheduleDao.removeTimerScheduleDetailAll();
 		
@@ -244,4 +244,13 @@ public class TimerScheduleService {
 		}
 	}
 	
+	@Transactional
+	public void deleteTimerSchedule(TimerSchedule timerSchedule) {
+		
+		if (timerScheduleDao.getTimerSchedule(timerSchedule) == null) {
+			throw new RuntimeException("존재하지않는 스케쥴입니다.");
+		}
+		
+		timerScheduleDao.removeTimerSchedule(timerSchedule);
+	}
 }

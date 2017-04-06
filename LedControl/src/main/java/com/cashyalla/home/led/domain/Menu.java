@@ -31,6 +31,9 @@ public class Menu {
 
 	@Getter @Setter
 	private String useYn;
+	
+	@Getter @Setter
+	private String icon;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)

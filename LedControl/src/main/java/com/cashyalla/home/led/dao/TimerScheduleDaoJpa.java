@@ -20,6 +20,11 @@ public class TimerScheduleDaoJpa implements TimerScheduleDao {
 	private TimerScheduleDetailRepository timerScheduleDetailRepository;
 	
 	@Override
+	public TimerSchedule getTimerSchedule(TimerSchedule timerSchedule) {
+		return timerScheduleRepository.findOne(timerSchedule.getSeq());
+	}
+	
+	@Override
 	public List<TimerSchedule> getTimerScheduleList() {
 		return timerScheduleRepository.findAllByOrderByHourAscMinuteAsc();
 	}
@@ -32,6 +37,12 @@ public class TimerScheduleDaoJpa implements TimerScheduleDao {
 	@Override
 	public void removeTimerScheduleAll() {
 		timerScheduleRepository.deleteAll();
+		timerScheduleRepository.flush();
+	}
+	
+	@Override
+	public void removeTimerSchedule(TimerSchedule timerSchedule) {
+		timerScheduleRepository.delete(timerSchedule);
 		timerScheduleRepository.flush();
 	}
 	

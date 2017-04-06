@@ -42,10 +42,17 @@
 							<button type="button" class="btn btn-warning btn-sm btn-flat btn-update" onclick="updateModal('${ledMode.modeId}');">수정</button>
 							<button type="button" class="btn btn-danger btn-sm btn-flat btn-delete" onclick="deleteMode('${ledMode.modeId}');">삭제</button>
 						</c:if>
-						<c:if test="${ledMode.modeId eq config.modeSchedule}">
-							<button type="button" class="btn btn-warning btn-sm btn-flat btn-settings" onclick="goPage('/led/timer/list');">설정</button>
+						<c:if test="${ledMode.modeId eq config.modeSchedule or ledMode.modeId eq config.modeManual}">
+							<c:choose>
+								<c:when test="${ledMode.modeId eq config.modeManual}">
+									<button type="button" class="btn btn-warning btn-sm btn-flat btn-settings" onclick="setManual();">설정</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" class="btn btn-warning btn-sm btn-flat btn-settings" onclick="goPage('/led/manual/list');">설정</button>
+								</c:otherwise>
+							</c:choose>
 						</c:if>
-						<c:if test="${ledMode.modeId ne currentLedMode.modeId}">
+						<c:if test="${ledMode.modeId ne currentLedMode.modeId and ledMode.modeId ne config.modeManual}">
 							<button type="button" class="btn btn-primary btn-sm btn-flat btn-ok" onclick="setMode('${ledMode.modeId}');">적용</button>
 						</c:if>
 						</div>
@@ -69,12 +76,18 @@
 					<form id="modeForm">
 						<input type="text" hidden name="modeId"/>
 						<div class="form-group">
-							<span class="input-group-addon" id="mode_name_addon">Mode이름</span>
-							<input type="text" class="form-control" name="modeName" placeholder="Mode이름" aria-describedby="mode_name_addon"/>
+							<label for="modeName" class="col-sm-2 control-label">Mode이름</label>
+							
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="modeName" name="modeName" placeholder="Mode이름"/>
+							</div>
 						</div>
 						<div class="form-group">
-							<span class="input-group-addon" id="description_addon">Mode설명</span>
-							<input type="text" class="form-control" name="description" placeholder="Mode설명" aria-describedby="description_addon"/>
+							<label for="description" class="col-sm-2 control-label">Mode설명</label>
+
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="description" name="description" placeholder="Mode설명"/>
+							</div>
 						</div>
 
 						<c:forEach items="${dimGroupList}" var="dimGroup" varStatus="status">
@@ -142,8 +155,6 @@
 
 			function onSetValueChange(obj, sliderId) {
 				var val = obj.val() * 1;
-
-				console.log('val type : ' + (typeof val));
 
 				if (typeof val === 'number') {
 					$('#' + sliderId).slider('setValue', val);
@@ -248,12 +259,29 @@
 					return;
 				}
 
-				var params = {modeId: modeId}
+				var params = {modeId: modeId};
 
 				$.post('set', params, function (response) {
 					if (response.commonResult.success == true) {
 						alert('선택하신 조명 모드로 설정되었습니다.');
 						pageRefresh();
+					} else {
+						alert(response.commonResult.message);
+					}
+				})
+			}
+
+			function setManual() {
+				var isConfirm = confirm('수동모드 설정을 하시면 바로 수동모드로 적용이됩니다. 진행 하시겠습니까?');
+				if (isConfirm == false) {
+					return;
+				}
+
+				var params = {modeId: '${config.modeManual}'};
+
+				$.post('set', params, function (response) {
+					if (response.commonResult.success == true) {
+						goPage('/led/manual/list');
 					} else {
 						alert(response.commonResult.message);
 					}

@@ -86,32 +86,44 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="dimGroupForm">
+					<form id="dimGroupForm" class="form-horizontal">
 						<input type="hidden" name="dimId"/>
 						<div class="form-group">
-							<span class="input-group-addon" id="dim_name_addon">디밍 그룹 이름</span>
-							<input type="text" class="form-control" name="dimName" placeholder="디밍 그룹 이름" aria-describedby="dim_name_addon"/>
+							<label for="dimName" class="col-sm-3 control-label">디밍 그룹 이름</label>
+
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="dimName" name="dimName" placeholder="디밍 그룹 이름"/>
+							</div>
 						</div>
 						<div class="form-group">
-							<span class="input-group-addon" id="description_addon">디밍 그룹 설명</span>
-							<input type="text" class="form-control" name="description" placeholder="디밍 그룹 설명" aria-describedby="description_addon"/>
+							<label for="description" class="col-sm-3 control-label">디밍 그룹 설명</label>
+
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="description" name="description" placeholder="디밍 그룹 설명"/>
+							</div>
 						</div>
-              <!-- Color Picker -->
+              			<!-- Color Picker -->
               			<div class="form-group">
-                			<label>Color picker with addon:</label>
-                			<div class="input-group" id="dimGroupColorPicker">
-                  				<input type="text" class="form-control" name="color">
-								<div class="input-group-addon">
-                    				<i></i>
-                  				</div>
+                			<label for="color" class="col-sm-3 control-label">색상</label>
+
+                			<div class="col-sm-9">
+	                			<div class="input-group" id="dimGroupColorPicker">
+	                  				<input type="text" class="form-control" id="color" name="color">
+									<div class="input-group-addon">
+	                    				<i></i>
+	                  				</div>
+	                			</div>
                 			</div>
                 		</div>
 						<div class="form-group">
-							<span class="input-group-addon" id="use_yn_addon">사용여부</span>
-							<select class="form-control" name="useYn" aria-describedby="use_yn_addon">
-								<option value="Y">Y</option>
-								<option value="N">N</option>
-							</select>
+							<label for="useYn" class="col-sm-3 control-label">사용여부</label>
+
+							<div class="col-sm-9">
+								<select class="form-control" id="useYn" name="useYn">
+									<option value="Y">Y</option>
+									<option value="N">N</option>
+								</select>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -164,7 +176,7 @@
 	</div>
 	<content tag="end">
 		<!-- bootstrap color picker -->
-		<script src="../../plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+		<script src="/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function () {
 
@@ -216,6 +228,7 @@
 						$('#dimGroupForm input[name=dimId]').val(dimGroup.dimId);
 						$('#dimGroupForm input[name=dimName]').val(dimGroup.dimName);
 						$('#dimGroupForm input[name=description]').val(dimGroup.description);
+						$('#dimGroupForm input[name=color]').val(dimGroup.color);
 						$('#dimGroupForm select[name=useYn]').val(dimGroup.useYn);
 
 						$('#btnSave').hide();

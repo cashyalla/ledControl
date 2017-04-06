@@ -46,12 +46,13 @@
 									<c:forEach items="${dimGroupList}" var="dimGroup">
 										<th class="text-center">${dimGroup.dimName}</th>
 									</c:forEach>
+									<th class="text-center">삭제</th>
 								</tr>
 							</thead>
 							<tbody id="timerScheduleBody">
 								<c:if test="${empty timerScheduleList}">
 									<tr id="rowEmpty">
-										<td colspan="${fn:length(dimGroupList) + 1}" class="text-center">설정된 타이머가 없습니다.</td>
+										<td colspan="${fn:length(dimGroupList) + 2}" class="text-center">설정된 타이머가 없습니다.</td>
 									</tr>
 								</c:if>
 								<c:forEach items="${timerScheduleList}" var="timerSchedule" varStatus="status">
@@ -72,6 +73,9 @@
 											<input type="number" name="setValue" value="${detail.setValue}" min="0" max="100"/>
 										</td>
 										</c:forEach>
+										<td class="text-center">
+											<button type="button" class="btn btn-sm btn-danger btn-flat btn-delete" onclick="deleteTimerSchedule(${timerSchedule.seq});">삭제</button>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -244,6 +248,25 @@
 				$.post('update', params, function (response) {
 					if (response.commonResult.success == true) {
 						alert('타이머 스케쥴이 저장되었습니다.');
+						pageRefresh();
+					} else {
+						alert(response.commonResult.message);
+					}
+				});
+			}
+
+			function deleteTimerSchedule(seq) {
+
+		        var isConfirm = confirm('선택한 항목을 삭제하시겠습니까?');
+		        if (isConfirm == false) {
+		        	return;
+		        }
+
+				var param = {seq: seq};
+
+				$.post('delete', param, function (response) {
+					if (response.success == true) {
+						alert('삭제되었습니다.');
 						pageRefresh();
 					} else {
 						alert(response.commonResult.message);

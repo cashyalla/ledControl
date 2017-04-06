@@ -63,7 +63,7 @@
 	
 				$.post('/login/login', param, function (response) {
 					if (response.commonResult.success == true) {
-						document.location.href = '/led/mode/list';
+						document.location.href = '/led/main';
 					} else {
 						alert(response.commonResult.message);
 					}

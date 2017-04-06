@@ -34,7 +34,7 @@ public class LoginController {
 	public String loginPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		if (SessionUtil.isLogin(request) == true) {
-			response.sendRedirect("/led/mode/list");
+			response.sendRedirect("/led/main");
 		}
 
 		return "/login/loginPage";
